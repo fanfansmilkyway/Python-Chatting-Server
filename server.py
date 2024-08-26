@@ -16,10 +16,10 @@ PINK = '\033[95m'
 
 HEADER = 64
 PORT = 8080
-SERVER = "0.0.0.0"
+#SERVER = "0.0.0.0"
 #SERVER = "127.0.0.1"
 # Another way to get the local IP address automatically
-#SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = socket.gethostbyname(socket.gethostname())
 #print(SERVER)
 #print(socket.gethostname())
 ADDR = (SERVER, PORT)
