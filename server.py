@@ -1,6 +1,4 @@
-__version__ = "DEV1.0"
-print(f"Version: {__version__}")
-print()
+# Python 3.12.3
 
 import socket
 import time
@@ -22,6 +20,10 @@ BLUE = '\033[34m'
 PURPLE = '\033[35m'
 YELLOW = '\033[93m'
 PINK = '\033[95m'
+
+__version__ = "DEV1.0.1"
+print(NORMAL, f"Version: {__version__}")
+print()
 
 HEADER = 64
 PORT = arguments.server_port
@@ -82,7 +84,6 @@ def start():
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
         conn, addr = server.accept()
-        conn.send(b"HereIsPythonChattingService") # Send Verify Code
         username = str(conn.recv(1024).decode(FORMAT))
         if username == DISCONNECT_MESSAGE:
             conn.close()
