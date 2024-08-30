@@ -1,3 +1,7 @@
+__version__ = "DEV1.0"
+print(f"Version: {__version__}")
+print()
+
 import socket
 import time
 import threading
@@ -41,14 +45,9 @@ def handle_client(conn, addr, client_username):
     print(f"[NEW CONNECTION] {addr} connected.")
     connected = True
     while True:
-        '''
-        if detect_client_connection(conn) == False:
-            return
-        '''
         action = str(conn.recv(4).decode(FORMAT))
         print("Action:" + action)
         if action == "SEND":
-            print("SEND")
             msg = str(conn.recv(2048).decode(FORMAT))
             time.sleep(0.1)
             target = str(conn.recv(1024).decode(FORMAT))
@@ -61,7 +60,6 @@ def handle_client(conn, addr, client_username):
             print(MESSAGES)
 
         if action == "RECV":
-            print("RECV")
             messages = MESSAGES[client_username]
             NumberOfMessage = len(messages)
             conn.send(str(NumberOfMessage).encode(FORMAT)) # Send the number of messages
