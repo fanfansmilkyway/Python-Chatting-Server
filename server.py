@@ -1,8 +1,13 @@
 import socket
 import time
 import threading
-import duckdb
+import argparse
 import time
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-ip', '--server_ip', default=socket.gethostbyname(socket.gethostname()), type=str, help="Server IP Address")
+parser.add_argument('-port', '--server_port', default=8080, type=int, help="The port where service running on")
+arguments = parser.parse_args()
 
 # Colors
 NORMAL = '\033[0m'
@@ -15,13 +20,8 @@ YELLOW = '\033[93m'
 PINK = '\033[95m'
 
 HEADER = 64
-PORT = 8080
-#SERVER = "0.0.0.0"
-#SERVER = "127.0.0.1"
-# Another way to get the local IP address automatically
-SERVER = socket.gethostbyname(socket.gethostname())
-#print(SERVER)
-#print(socket.gethostname())
+PORT = arguments.server_port
+SERVER = arguments.server_ip
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DISC"
@@ -30,16 +30,12 @@ DISCONNECT_MESSAGE = "DISC"
 MESSAGES = {}
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
-'''
-def detect_client_connection(conn):
-    try:
-        conn.send(b"Verify is the client still connected")
-    except BrokenPipeError:
-        return False
-    else:
-        return True
-'''
+try:
+    server.bind(ADDR)
+except Exception as e:
+    print(e)
+    print(RED, f"Server failed to bind at {ADDR}")
+    exit()
 
 def handle_client(conn, addr, client_username):
     print(f"[NEW CONNECTION] {addr} connected.")
@@ -88,6 +84,7 @@ def start():
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
         conn, addr = server.accept()
+        conn.send(b"HereIsPythonChattingService") # Send Verify Code
         username = str(conn.recv(1024).decode(FORMAT))
         if username == DISCONNECT_MESSAGE:
             conn.close()
