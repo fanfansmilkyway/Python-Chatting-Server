@@ -21,7 +21,9 @@ PURPLE = '\033[35m'
 YELLOW = '\033[93m'
 PINK = '\033[95m'
 
-__version__ = "DEV1.0.1"
+CONFIRM_CONNECTION_MESSAGE = "CONFIRM_CONNECTION!"
+
+__version__ = "DEV1.0.2"
 print(NORMAL, f"Version: {__version__}")
 print()
 
@@ -36,6 +38,7 @@ DISCONNECT_MESSAGE = "DISC"
 MESSAGES = {}
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 try:
     server.bind(ADDR)
 except Exception as e:
@@ -79,11 +82,15 @@ def handle_client(conn, addr, client_username):
     conn.close()
     print(f"Connection with {addr} closed")
 
+def confirm_connection(conn):
+    conn.send(CONFIRM_CONNECTION_MESSAGE.encode(FORMAT))
+
 def start():
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
         conn, addr = server.accept()
+        confirm_connection(conn=conn)
         username = str(conn.recv(1024).decode(FORMAT))
         if username == DISCONNECT_MESSAGE:
             conn.close()
